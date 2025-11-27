@@ -10,14 +10,14 @@ button {
   cursor: pointer;
 }
 
-.grid-container {
+.game-board {
   display: grid;
   grid-template-columns: repeat(3, max-content);
   border: 1px solid black;
   width: max-content;
 }
 
-.grid-block {
+.game-block {
   border: 1px solid black;
   width: 10rem;
   height: 10rem;
