@@ -14,34 +14,29 @@ const gamePlayers = (() => {
 })();
 
 const gameBoard = (() => {
-  const boardData = {
-    player1: [],
-    player2: []
-  };
-  const winConditions = [
-    [1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,6,9],
-    [3,5,7]
-  ];
+  const boardData = [];
   
-  const getBoardData = () => ({...boardData});
+  const getBoardData = () => ([...boardData]);
+
   const setBoardData = (player, blockNumber) => {
-    boardData[player] = [...boardData[player], +blockNumber];
-    boardData[player].sort((a, b) => a - b);
+    boardData[blockNumber] = player;
   }
+  
   const validateBoardData = (blockNumber) => {
-    if([...boardData.player1, ...boardData.player2].includes(+blockNumber)) {
+    if(boardData[blockNumber]) {
       return false;
     };
     return true;
   }
 
   const playerInput = (blockNumber) => {
-    const {getPlayerTurn, togglePlayer} = gameState;
-
+    const {getPlayerTurn, togglePlayer, checkWinner} = gameState;
+    
     if(validateBoardData(blockNumber)) {
       setBoardData(getPlayerTurn(), blockNumber);
       togglePlayer();
       displayController();
+      checkWinner();
     }
   }
 
@@ -50,26 +45,52 @@ const gameBoard = (() => {
 
 const gameState = (() => {
   let playerTurn = 'player1';
+  let gameWinner = null;
 
   const getPlayerTurn = () => playerTurn;
   const togglePlayer = () => {
     playerTurn = playerTurn === 'player1' ? 'player2' : 'player1';
   }
 
-  return {getPlayerTurn, togglePlayer}
+  const checkWinner = () => {
+    const boardData = gameBoard.getBoardData();
+    const winConditions = [
+      [0,1,2],[0,3,6],[0,4,8],[1,4,7],[2,5,8],
+      [2,4,6], [3,4,5], [6,7,8]
+    ];
+
+    winConditions.forEach(([a,b,c]) => {
+      for(const player in gamePlayers) {
+        if(boardData[a] === player && 
+        boardData[b] === player &&
+        boardData[c] === player) {
+          gameWinner = player;
+          return gameWinner;
+        }
+      }
+    })
+
+    return null;
+  }
+
+  return {getPlayerTurn, togglePlayer, checkWinner}
 })();
 
 const displayController = (() => {
-  const displaySymbol = function (boardPosition, player) {
-    const gameBlockNode = document.querySelector(`.game-block[data-position='${boardPosition}']`);
+  const displaySymbol = function (player, index) {
+    const gameBlockNode = document.querySelector(`.game-block[data-position='${index}']`);
     gameBlockNode.textContent = gamePlayers[player].symbol;
   }
 
   const displayBoard = () => {
     const boardData = gameBoard.getBoardData();
-    for(const player in boardData) {
-      boardData[player].forEach(boardPosition => 
-      displaySymbol(boardPosition, player));
+
+    for(const player in gamePlayers) {
+      boardData.forEach((boardPosition, index) => {
+        if(boardPosition === player) {
+          displaySymbol(player, index)
+        }
+      })
     }
   }
 
@@ -80,6 +101,5 @@ const gameBlockNode = document.querySelectorAll('button.game-block');
 gameBlockNode.forEach(node => {
   node.addEventListener('click', (e) => {
     gameBoard.playerInput(e.currentTarget.dataset['position']);
-    console.log(gameBoard.getBoardData());
   })
 })
