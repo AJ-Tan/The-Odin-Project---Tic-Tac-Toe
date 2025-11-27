@@ -17,7 +17,6 @@ const gameBoard = (() => {
   const boardData = [];
   
   const getBoardData = () => ([...boardData]);
-
   const setBoardData = (player, blockNumber) => {
     boardData[blockNumber] = player;
   }
@@ -29,18 +28,37 @@ const gameBoard = (() => {
     return true;
   }
 
-  const playerInput = (blockNumber) => {
+  const playerInput = (blockNumber, btnNode) => {
     const {getPlayerTurn, togglePlayer, checkWinner} = gameState;
     
     if(validateBoardData(blockNumber)) {
       setBoardData(getPlayerTurn(), blockNumber);
+      btnNode.classList.add(getPlayerTurn());
       togglePlayer();
       displayController();
-      checkWinner();
+
+      const playerWinner = checkWinner();
+      if(playerWinner) {
+        const playagainOverlayNode = document.querySelector('.playagain-overlay');
+        const txtWinnerNode = document.getElementById('txt-winner');
+        txtWinnerNode.textContent = playerWinner;
+        playagainOverlayNode.style.display = 'flex';
+      }
     }
   }
 
-  return {getBoardData, playerInput};
+  const resetBoard = () => {
+    boardData.length = 0;
+    const gameCellNode = document.querySelectorAll('button.game-cell');
+
+    gameCellNode.forEach(cellNode => {
+      cellNode.textContent = '';
+      cellNode.classList.remove('player1');
+      cellNode.classList.remove('player2');
+    })
+  }
+
+  return {getBoardData, playerInput, resetBoard};
 })();
 
 const gameState = (() => {
@@ -64,42 +82,56 @@ const gameState = (() => {
         if(boardData[a] === player && 
         boardData[b] === player &&
         boardData[c] === player) {
-          gameWinner = player;
-          return gameWinner;
+          gameWinner = `${gamePlayers[player].name} wins!`;
         }
       }
     })
 
-    return null;
+    const boardDataCount = boardData.filter(v => v !== undefined).length;
+    if(!gameWinner && boardDataCount === 9) {
+      gameWinner = `It's a tie!`;
+    }
+
+    return gameWinner;
   }
 
-  return {getPlayerTurn, togglePlayer, checkWinner}
+  const resetState = () => {
+    playerTurn = 'player1';
+    gameWinner = null;
+  }
+
+  return {getPlayerTurn, togglePlayer, checkWinner, resetState}
 })();
 
 const displayController = (() => {
   const displaySymbol = function (player, index) {
-    const gameBlockNode = document.querySelector(`.game-block[data-position='${index}']`);
+    const gameBlockNode = document.querySelector(`.game-cell[data-position='${index}']`);
     gameBlockNode.textContent = gamePlayers[player].symbol;
   }
 
   const displayBoard = () => {
     const boardData = gameBoard.getBoardData();
-
-    for(const player in gamePlayers) {
-      boardData.forEach((boardPosition, index) => {
-        if(boardPosition === player) {
-          displaySymbol(player, index)
-        }
-      })
-    }
+    boardData.forEach((boardPosition, index) => {
+      if(boardPosition) {
+        displaySymbol(boardPosition, index)
+      }
+    })
   }
 
   return displayBoard;
 })();
 
-const gameBlockNode = document.querySelectorAll('button.game-block');
-gameBlockNode.forEach(node => {
-  node.addEventListener('click', (e) => {
-    gameBoard.playerInput(e.currentTarget.dataset['position']);
+const gameCellNode = document.querySelectorAll('button.game-cell');
+gameCellNode.forEach(cellNode => {
+  cellNode.addEventListener('click', (e) => {
+    gameBoard.playerInput(e.currentTarget.dataset['position'], e.currentTarget);
   })
+})
+
+const btnPlayNode = document.querySelector('.btn-play');
+btnPlayNode.addEventListener('click', () => {
+  const playagainOverlayNode = document.querySelector('.playagain-overlay');
+  playagainOverlayNode.style.display = 'none';
+  gameBoard.resetBoard();
+  gameState.resetState();
 })

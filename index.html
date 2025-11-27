@@ -4,23 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="./index.js"></script>
   </head>
   <body>
+    <header>
+      <h1>TIC TAC TOE</h1>
+    </header>
     <main>
       <section class="game-container">
-        <h1>TIC TAC TOE</h1>
         <div class="game-board">
-          <button type="button" class="game-block" data-position="0"></button>
-          <button type="button" class="game-block" data-position="1"></button>
-          <button type="button" class="game-block" data-position="2"></button>
-          <button type="button" class="game-block" data-position="3"></button>
-          <button type="button" class="game-block" data-position="4"></button>
-          <button type="button" class="game-block" data-position="5"></button>
-          <button type="button" class="game-block" data-position="6"></button>
-          <button type="button" class="game-block" data-position="7"></button>
-          <button type="button" class="game-block" data-position="8"></button>
+          <button type="button" class="game-cell" data-position="0"></button>
+          <button type="button" class="game-cell" data-position="1"></button>
+          <button type="button" class="game-cell" data-position="2"></button>
+          <button type="button" class="game-cell" data-position="3"></button>
+          <button type="button" class="game-cell" data-position="4"></button>
+          <button type="button" class="game-cell" data-position="5"></button>
+          <button type="button" class="game-cell" data-position="6"></button>
+          <button type="button" class="game-cell" data-position="7"></button>
+          <button type="button" class="game-cell" data-position="8"></button>
+          <div class="playagain-overlay">
+            <h2 id="txt-winner">Player 2 Wins!</h2>
+            <button class="btn-play" type="button">Play Again</button>
+          </div>
         </div>
       </section>
     </main>

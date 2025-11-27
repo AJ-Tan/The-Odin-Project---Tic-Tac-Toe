@@ -4,6 +4,36 @@
   padding: 0;
 }
 
+:root {
+  --color-bg: #f7f2ec;          /* light beige background */
+  --color-board: #d7c3a3;       /* warm light brown */
+  --color-board-line: #b99a72;  /* medium brown line/border */
+  --color-x: #8b4b3e;           /* rich reddish-brown for X */
+  --color-o: #3e5f5c;           /* deep greenish-teal for O (nice contrast) */
+  --color-text: #5a4633;        /* dark brown text */
+  --color-overlay-bg: rgba(215, 195, 163, 0.9); /* soft brown overlay */
+  --color-button: #b99a72;      /* brown button */
+  --color-button-hover: #a98b63;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  min-height: 100vh;
+
+  color: var(--color-text);
+  font-family: Montserrat, Verdana, sans-serif;
+  background-color: var(--color-bg);
+}
+
+h1 {
+  font-size: 3rem;
+}
+
 button {
   font: inherit;
   background-color: transparent;
@@ -11,14 +41,62 @@ button {
 }
 
 .game-board {
+  position: relative;
+
   display: grid;
   grid-template-columns: repeat(3, max-content);
-  border: 1px solid black;
+  border: 1px solid var(--color-board-line);
   width: max-content;
+
+  background-color: var(--color-board);
 }
 
-.game-block {
-  border: 1px solid black;
-  width: 10rem;
-  height: 10rem;
+.game-cell {
+  border: 1px solid var(--color-board-line);
+  width: 12.5rem;
+  height: 12.5rem;
+  font-size: 8rem;
+  transition: background-color 0.1s ease-in-out;
+
+  &.player1 {
+    color: var(--color-x);
+  }
+
+  &.player2 {
+    color: var(--color-o)
+  }
+
+  &:not(:is(.player1,.player2)):hover {
+    background-color: var(--color-button-hover);
+  }
+}
+
+.playagain-overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background-color: var(--color-overlay-bg);
+}
+
+#txt-winner {
+  font-size: 2rem;
+}
+
+.btn-play {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.75rem 2rem;
+  color: whitesmoke;
+  background-color: var(--color-button);
+  font-size: 1.5rem;
+  font-weight: 600;
+  transition: background-color 0.1s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-button-hover);
+  }
 }
