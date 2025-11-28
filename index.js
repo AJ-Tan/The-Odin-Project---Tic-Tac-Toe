@@ -40,7 +40,8 @@ const gameBoard = (() => {
       setBoardData(getPlayerTurn(), blockNumber);
       btnNode.classList.add(getPlayerTurn());
       togglePlayer();
-      displayController();
+      displayController.displayBoard();
+      displayController.displayPlayerTurn();
 
       const playerWinner = checkWinner();
       if(playerWinner) {
@@ -48,6 +49,7 @@ const gameBoard = (() => {
         const txtWinnerNode = document.getElementById('txt-winner');
         txtWinnerNode.textContent = playerWinner;
         playagainOverlayNode.style.display = 'flex';
+        displayController.hidePlayerTurn();
       }
     }
   }
@@ -103,6 +105,7 @@ const gameState = (() => {
   const resetState = () => {
     playerTurn = 'player1';
     gameWinner = null;
+    displayController.displayPlayerTurn();
   }
 
   return {getPlayerTurn, togglePlayer, checkWinner, resetState}
@@ -123,7 +126,19 @@ const displayController = (() => {
     })
   }
 
-  return displayBoard;
+  const displayPlayerTurn = () => {
+    const playerturnNode = document.querySelector('.player-turn');
+    const playerName = gamePlayers.players[gameState.getPlayerTurn()].name;
+    playerturnNode.style.visibility = 'visible';
+    playerturnNode.textContent = `${playerName}'s turn...`;
+  }
+
+  const hidePlayerTurn = () => {
+    const playerturnNode = document.querySelector('.player-turn');
+    playerturnNode.style.visibility = 'hidden';
+  }
+
+  return {displayBoard, displayPlayerTurn, hidePlayerTurn};
 })();
 
 const gameCellNode = document.querySelectorAll('button.game-cell');
@@ -152,4 +167,5 @@ formPlayersNode.addEventListener('submit', (e) => {
   player2 = player2 ? player2 : 'Player 2';
   gamePlayers.setPlayers(player1, player2);
   playstartOverlay.style.display = 'none';
+  displayController.displayPlayerTurn();
 })

@@ -40,6 +40,16 @@ button {
   cursor: pointer;
 }
 
+.game-container {
+  text-align: center;
+}
+
+.player-turn {
+  height: 2rem;
+  margin-block-end: 0.5rem;
+  visibility: hidden;
+}
+
 .game-board {
   position: relative;
 
