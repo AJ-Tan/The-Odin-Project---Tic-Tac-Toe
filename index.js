@@ -8,9 +8,14 @@ const gamePlayers = (() => {
       name: 'Player 2',
       symbol: 'O'
     }
+  };
+
+  const setPlayers = (player1Name, player2Name) => {
+    players.player1.name = player1Name;
+    players.player2.name = player2Name;
   }
 
-  return players;
+  return {players, setPlayers};
 })();
 
 const gameBoard = (() => {
@@ -78,11 +83,11 @@ const gameState = (() => {
     ];
 
     winConditions.forEach(([a,b,c]) => {
-      for(const player in gamePlayers) {
+      for(const player in gamePlayers.players) {
         if(boardData[a] === player && 
         boardData[b] === player &&
         boardData[c] === player) {
-          gameWinner = `${gamePlayers[player].name} wins!`;
+          gameWinner = `${gamePlayers.players[player].name} wins!`;
         }
       }
     })
@@ -106,7 +111,7 @@ const gameState = (() => {
 const displayController = (() => {
   const displaySymbol = function (player, index) {
     const gameBlockNode = document.querySelector(`.game-cell[data-position='${index}']`);
-    gameBlockNode.textContent = gamePlayers[player].symbol;
+    gameBlockNode.textContent = gamePlayers.players[player].symbol;
   }
 
   const displayBoard = () => {
@@ -128,10 +133,23 @@ gameCellNode.forEach(cellNode => {
   })
 })
 
-const btnPlayNode = document.querySelector('.btn-play');
+const btnPlayNode = document.getElementById('play-again');
 btnPlayNode.addEventListener('click', () => {
   const playagainOverlayNode = document.querySelector('.playagain-overlay');
   playagainOverlayNode.style.display = 'none';
   gameBoard.resetBoard();
   gameState.resetState();
+})
+
+const formPlayersNode = document.querySelector('.form-players');
+formPlayersNode.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(formPlayersNode);
+  const playstartOverlay = document.querySelector('.playstart-overlay');
+  let {player1, player2} = Object.fromEntries(formData.entries());
+  player1 = player1 ? player1 : 'Player 1';
+  player2 = player2 ? player2 : 'Player 2';
+  gamePlayers.setPlayers(player1, player2);
+  playstartOverlay.style.display = 'none';
 })

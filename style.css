@@ -71,7 +71,7 @@ button {
   }
 }
 
-.playagain-overlay {
+.playagain-overlay,.playstart-overlay {
   position: absolute;
   inset: 0;
   display: none;
@@ -89,7 +89,8 @@ button {
 .btn-play {
   border: none;
   border-radius: 2rem;
-  padding: 0.75rem 2rem;
+  padding-block: 0.75rem;
+  width: 10rem;
   color: whitesmoke;
   background-color: var(--color-button);
   font-size: 1.5rem;
@@ -99,4 +100,28 @@ button {
   &:hover {
     background-color: var(--color-button-hover);
   }
+}
+
+.playstart-overlay {
+  display: flex;
+}
+
+.form-players {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.players-header {
+  font-size: 2.5rem;
+}
+
+.input-player {
+  font-size: 1.3rem;
+  outline: none;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--color-board-line);
 }

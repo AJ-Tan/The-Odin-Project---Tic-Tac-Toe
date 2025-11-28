@@ -31,7 +31,31 @@
           <button type="button" class="game-cell" data-position="8"></button>
           <div class="playagain-overlay">
             <h2 id="txt-winner">Player 2 Wins!</h2>
-            <button class="btn-play" type="button">Play Again</button>
+            <button id="play-again" class="btn-play" type="button">
+              Play Again
+            </button>
+          </div>
+          <div class="playstart-overlay">
+            <form class="form-players" action="#">
+              <h2 class="players-header">Players</h2>
+              <input
+                type="text"
+                name="player1"
+                id="player1"
+                class="input-player"
+                placeholder="Player 1"
+              />
+              <input
+                type="text"
+                name="player2"
+                id="player2"
+                class="input-player"
+                placeholder="Player 2"
+              />
+              <button id="play-start" type="submit" class="btn-play">
+                Start
+              </button>
+            </form>
           </div>
         </div>
       </section>
